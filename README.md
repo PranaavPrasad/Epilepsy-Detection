@@ -1,304 +1,127 @@
-# Epilepsy Seizure Detection using Deep Learning
+# Epilepsy Seizure Detection from EEG Signals
 
-A comprehensive machine learning project implementing CNN, Bi-LSTM, and hybrid CNN+Bi-LSTM models for automated epilepsy seizure detection from EEG signals using the CHB-MIT Scalp EEG Database.
+Deep learning models for automated seizure detection using the CHB-MIT Scalp EEG Database.
 
-## 🎯 Project Overview
+## Overview
 
-This project implements the research paper "A hybrid CNN-Bi-LSTM model with feature fusion for accurate epilepsy seizure detection" to detect seizure events from pediatric EEG recordings.
-
-**Key Achievements:**
-- Processed EEG data from 5-6 subjects (~5-7 GB)
-- Implemented 3 deep learning architectures
-- Achieved high accuracy in seizure detection
-- Comprehensive preprocessing pipeline for EEG signals
-
-## 📊 Dataset
-
-**CHB-MIT Scalp EEG Database** (Pediatric Seizure Dataset)
-- Source: [Kaggle](https://www.kaggle.com/datasets/abhishekinnvonix/seizure-epilepcy-chb-mit-eeg-dataset-pediatric)
-- Original size: ~40 GB (22 subjects)
-- Used: 5-6 subjects with highest seizure frequency
-- Sampling rate: 256 Hz
-- Channels: 23-26 EEG channels per subject
-
-## 🏗️ Project Structure
-
-```
-Epilepsy-Detection/
-├── data/
-│   ├── raw/                    # Raw EEG data (download separately)
-│   └── processed/              # Preprocessed data and results
-├── models/                     # Trained model files
-├── notebooks/
-│   ├── 01_exploratory_data_analysis.ipynb
-│   ├── 02_preprocessing.ipynb
-│   └── 03_model_training.ipynb
-├── requirements.txt
-├── README.md
-└── REPORT.md
-```
-
-## 🚀 Quick Start
-
-### 1. Setup Environment
-
-```bash
-# Clone repository
-git clone <repository-url>
-cd Epilepsy-Detection
-
-# Create virtual environment
-python -m venv .venv
-.venv\Scripts\activate  # Windows
-# source .venv/bin/activate  # Linux/Mac
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### 2. Configure Kaggle API
-
-Download `kaggle.json` from your Kaggle account and place it in:
-- Windows: `C:\Users\<username>\.kaggle\`
-- Linux/Mac: `~/.kaggle/`
-
-### 3. Download Dataset
-
-```python
-# Run this in notebook 01_exploratory_data_analysis.ipynb
-# Or use Kaggle CLI:
-kaggle datasets download -d abhishekinnvonix/seizure-epilepcy-chb-mit-eeg-dataset-pediatric
-```
-
-### 4. Run Notebooks in Order
-
-1. **Phase 1**: `01_exploratory_data_analysis.ipynb` - EDA and dataset exploration
-2. **Phase 2**: `02_preprocessing.ipynb` - Data cleaning and feature extraction
-3. **Phase 3**: `03_model_training.ipynb` - Model training and evaluation
-
-## 🤖 Models Implemented
-
-### 1. CNN (Convolutional Neural Network)
-- Spatial feature extraction from EEG signals
-- 3 convolutional blocks with batch normalization
-- MaxPooling and dropout for regularization
-
-### 2. Bi-LSTM (Bidirectional Long Short-Term Memory)
-- Temporal pattern recognition
-- Captures long-term dependencies in EEG sequences
-- Bidirectional processing for context awareness
-
-### 3. Hybrid CNN+Bi-LSTM
-- **Best performing model**
-- Combines CNN's spatial features with LSTM's temporal modeling
-- Feature fusion for enhanced detection accuracy
-
-## 📈 Results
-
-| Model | Accuracy | Precision | Recall | F1-Score |
-|-------|----------|-----------|--------|----------|
-| CNN | ~XX% | ~XX% | ~XX% | ~XX% |
-| Bi-LSTM | ~XX% | ~XX% | ~XX% | ~XX% |
-| **CNN+Bi-LSTM** | **~XX%** | **~XX%** | **~XX%** | **~XX%** |
-
-*Results will be populated after training*
-
-## 🔧 Preprocessing Pipeline
-
-1. **Bandpass Filtering**: 0.5-50 Hz to remove noise
-2. **Normalization**: Z-score normalization per channel
-3. **Windowing**: 4-second windows with 2-second overlap
-4. **Labeling**: Automatic seizure/normal classification
-5. **Balancing**: Class balancing to handle imbalance
-
-## 📋 Requirements
-
-- Python 3.10+
-- TensorFlow 2.15+
-- MNE (EEG processing)
-- NumPy, Pandas, Matplotlib
-- Scikit-learn
-- See `requirements.txt` for complete list
-
-## 🎓 Research Reference
-
-Based on:
-> "A hybrid CNN-Bi-LSTM model with feature fusion for accurate epilepsy seizure detection"
-> BMC Medical Informatics and Decision Making (2024)
-
-## 📝 Usage
-
-```python
-# Load trained model
-from tensorflow import keras
-model = keras.models.load_model('models/hybrid_model.keras')
-
-# Predict on new EEG data
-predictions = model.predict(new_eeg_data)
-```
-
-## 🤝 Contributing
-
-Contributions welcome! Please:
-1. Fork the repository
-2. Create a feature branch
-3. Submit a pull request
-
-## 📄 License
-
-This project is for educational and research purposes.
-
-## 👥 Authors
-
-Pranaav Prasad
-
-## 🙏 Acknowledgments
-
-- CHB-MIT Scalp EEG Database
-- Research paper authors
-- Kaggle community
-
----
-
-**Note**: Ensure you have downloaded the dataset before running preprocessing and training notebooks  
-- **Hybrid CNN+Bi-LSTM**: Combined spatial-temporal feature extraction
+This project implements multiple deep learning architectures to detect epileptic seizures from EEG recordings. We process pediatric EEG data and train CNN, LSTM, Bi-LSTM, and Hybrid models to classify seizure vs. normal brain activity.
 
 ## Dataset
 
-**CHB-MIT Scalp EEG Database** (Pediatric)
-- **Source**: [Kaggle](https://www.kaggle.com/datasets/abhishekinnvonix/seizure-epilepcy-chb-mit-eeg-dataset-pediatric)
-- **Patients**: 22 pediatric subjects with intractable seizures
+**CHB-MIT Scalp EEG Database**
+- **Source**: [Kaggle - CHB-MIT Pediatric Seizure Dataset](https://www.kaggle.com/datasets/abhishekinnvonix/seizure-epilepcy-chb-mit-eeg-dataset-pediatric)
+- **Size**: 5 subjects, 23,991 samples (2,181 seizures, 21,810 normal)
 - **Channels**: 23 EEG channels
-- **Sampling Rate**: 256 Hz
-- **Format**: EDF (European Data Format)
-- **Subset Used**: 5 subjects (~5-7 GB)
+- **Sampling Rate**: 256 Hz → 64 Hz (downsampled)
+- **Window Size**: 4 seconds with 3-second overlap (75%)
+- **Class Distribution**: 9.09% seizures, 90.91% normal (imbalanced)
+
+## Models
+
+| Model | Parameters | Description |
+|-------|------------|-------------|
+| **CNN** | 101,889 | Spatial feature extraction baseline |
+| **LSTM** | 66,689 | Temporal sequence learning |
+| **Bi-LSTM** | 212,865 | Bidirectional temporal patterns |
+| **Enhanced Hybrid** | 459,777 | Deep CNN + Large Bi-LSTM |
+
+## Results
+
+All models trained on 5 subjects with balanced batch sampling and focal loss:
+
+| Rank | Model | Accuracy | Precision | Recall | F1-Score |
+|------|-------|----------|-----------|--------|----------|
+| 🥇 | **CNN** | **97.80%** | **91.33%** | **83.79%** | **87.40%** |
+| 🥈 | Enhanced Hybrid | 96.67% | 92.59% | 68.81% | 78.95% |
+| 🥉 | LSTM | 94.47% | 74.24% | 59.94% | 66.33% |
+| 4 | Bi-LSTM | 94.50% | 74.90% | 59.33% | 66.21% |
+
+**Key Findings**:
+- **CNN achieved the best overall performance** (87.40% F1-score) with excellent balance of precision and recall
+- Enhanced Hybrid showed highest precision (92.59%) but lower recall
+- All models achieved >94% accuracy on the imbalanced test set
+
+![Model Comparison](figures/model_comparison.png)
+![Confusion Matrices](figures/confusion_matrices.png)
 
 ## Project Structure
 
 ```
 Epilepsy-Detection/
 ├── data/
-│   ├── raw/           # Raw EDF files (downloaded from Kaggle)
-│   └── processed/     # Preprocessed numpy arrays
+│   ├── raw/                          # Raw EEG files (download separately)
+│   └── processed/                    # Preprocessed data (preprocessed_data.h5)
+├── models/                            # Trained models (.keras files)
 ├── notebooks/
-│   ├── 01_eda.ipynb              # Exploratory data analysis
-│   ├── 02_preprocessing.ipynb     # Data preprocessing pipeline
-│   └── 03_model_training.ipynb    # Model training and evaluation
-├── models/            # Saved model weights
-├── README.md          # Project documentation
-└── requirements.txt   # Python dependencies
+│   ├── 01_exploratory_data_analysis.ipynb    # Dataset exploration
+│   ├── 02_preprocessing.ipynb                 # Data preprocessing
+│   └── 03_model_training.ipynb                # Model training
+├── requirements.txt
+├── README.md
+└── REPORT.md
 ```
 
-## Installation
+## Quick Start
 
-1. **Clone repository**
+### 1. Setup
+
 ```bash
-git clone <repository-url>
+git clone https://github.com/PranaavPrasad/Epilepsy-Detection.git
 cd Epilepsy-Detection
-```
 
-2. **Create virtual environment**
-```bash
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-```
+python -m venv .venv
+.venv\Scripts\activate  # Windows
+# source .venv/bin/activate  # Linux/Mac
 
-3. **Install dependencies**
-```bash
 pip install -r requirements.txt
 ```
 
-4. **Setup Kaggle API**
-- Download `kaggle.json` from [Kaggle Settings](https://www.kaggle.com/settings)
-- Place in `~/.kaggle/kaggle.json` (Linux/Mac) or `C:\Users\<username>\.kaggle\kaggle.json` (Windows)
+### 2. Download Dataset
 
-## Usage
-
-Run notebooks in order:
-
-1. **01_eda.ipynb** - Downloads dataset and performs exploratory analysis
-2. **02_preprocessing.ipynb** - Preprocesses data and creates train/val/test splits  
-3. **03_model_training.ipynb** - Trains models and evaluates performance
+Configure Kaggle API (`~/.kaggle/kaggle.json`) and download:
 
 ```bash
-jupyter notebook
+kaggle datasets download -d abhishekinnvonix/seizure-epilepcy-chb-mit-eeg-dataset-pediatric -p data/raw --unzip
 ```
 
-## Methodology
+### 3. Run Notebooks
 
-### Preprocessing Pipeline
-1. **Bandpass Filtering**: 0.5-50 Hz (remove DC offset and high-frequency noise)
-2. **Notch Filtering**: 60 Hz (eliminate powerline interference)
-3. **Normalization**: Z-score normalization
-4. **Windowing**: 4-second windows with 2-second overlap
-5. **Labeling**: Binary classification (seizure/non-seizure)
-6. **Balancing**: Address class imbalance
-
-### Model Architectures
-
-**CNN Model**
-- 3 convolutional blocks with batch normalization
-- Max pooling and dropout for regularization
-- Global average pooling
-- Dense layers for classification
-
-**Bi-LSTM Model**
-- 3 bidirectional LSTM layers
-- Batch normalization
-- Dropout for regularization
-- Dense classification layers
-
-**Hybrid CNN+Bi-LSTM**
-- CNN branch for spatial features
-- Bi-LSTM branch for temporal modeling
-- Feature fusion
-- Dense classification layers
-
-### Training Configuration
-- Optimizer: Adam (lr=0.001)
-- Loss: Categorical cross-entropy
-- Batch size: 32
-- Epochs: 50 (with early stopping)
-- Callbacks: ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
-
-## Results
-
-See `PROJECT_REPORT.md` for detailed results including:
-- Model performance metrics (accuracy, precision, recall, F1-score)
-- Confusion matrices
-- Training curves
-- Comparative analysis
+Execute notebooks in order:
+1. `01_exploratory_data_analysis.ipynb` - Explore dataset
+2. `02_preprocessing.ipynb` - Preprocess EEG data
+3. `03_model_training.ipynb` - Train and evaluate models
 
 ## Key Features
 
-- Complete end-to-end pipeline
-- Progress monitoring with tqdm
-- Multiple architecture comparison
-- Reproducible (fixed random seeds)
-- Well-documented notebooks
+- **Data Augmentation**: Gaussian noise + amplitude scaling (training only)
+- **Balanced Batches**: 20% seizures (train), 15% (validation) to handle imbalance
+- **Focal Loss**: Addresses class imbalance (gamma=2.0, alpha=0.70)
+- **Strong Regularization**: Dropout, L2, BatchNorm to combat 75% temporal overlap
 
-## Dependencies
+## Requirements
 
-- TensorFlow/Keras
-- MNE-Python (EEG processing)
-- NumPy, Pandas
-- Scikit-learn
-- Matplotlib, Seaborn
-- TQDM
+- Python 3.8+
+- TensorFlow 2.x
+- NumPy, Pandas, Matplotlib, Seaborn
+- MNE (EEG processing)
+- h5py (HDF5 file handling)
+- scikit-learn
 
-See `requirements.txt` for complete list with versions.
+See `requirements.txt` for complete list.
 
 ## References
 
-1. CHB-MIT Scalp EEG Database (PhysioNet)
-2. "A hybrid CNN-Bi-LSTM model with feature fusion for accurate epilepsy seizure detection"
-3. MNE-Python Documentation
-4. TensorFlow/Keras Documentation
+- **Dataset**: [CHB-MIT Scalp EEG Database](https://physionet.org/content/chbmit/1.0.0/)
+- **Paper Inspiration**: "A hybrid CNN-Bi-LSTM model with feature fusion for accurate epilepsy seizure detection"
 
 ## License
 
-Educational and research purposes only. Cite appropriate sources when using this code.
+This project is for educational purposes.
+
+## Author
+
+Pranaav Prasad
 
 ---
 
-**Note**: This project processes sensitive medical data. Ensure compliance with relevant data protection regulations (HIPAA, GDPR, etc.).
+*For detailed methodology and results, see [REPORT.md](REPORT.md)*
